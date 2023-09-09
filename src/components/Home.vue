@@ -39,11 +39,11 @@
 
             <!-- 内容 -->
             <Layout class="body__content">
-                <Breadcrumb style="margin: 16px 0">
+                <!-- <Breadcrumb style="margin: 16px 0">
                     <BreadcrumbItem>Home</BreadcrumbItem>
                     <BreadcrumbItem>List</BreadcrumbItem>
                     <BreadcrumbItem>App</BreadcrumbItem>
-                </Breadcrumb>
+                </Breadcrumb> -->
                 <LayoutContent class="body__content__page">
                     Content
                 </LayoutContent>
@@ -61,8 +61,8 @@ import {
     MenuItem,
     SubMenu,
     Menu,
-    BreadcrumbItem,
-    Breadcrumb,
+    // BreadcrumbItem,
+    // Breadcrumb,
 } from "ant-design-vue";
 import { UserOutlined, LaptopOutlined } from "@ant-design/icons-vue";
 
@@ -74,13 +74,14 @@ const openKeys = ref<string[]>(["sub1"]);
 .header {
     .logo {
         float: left;
-        width: 120px;
-        height: 31px;
-        margin: 16px 24px 16px 0;
-        background: rgba(255, 255, 255, 0.3);
+        width: 64px;
+        height: 64px;
+        background-image: url("@/assets/Assan.png");
+        background-repeat: no-repeat;
+        background-size: contain;
+        margin-right: 24px;
     }
 }
-
 .body {
     &__side {
         background: #fff;
