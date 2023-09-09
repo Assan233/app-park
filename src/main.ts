@@ -1,6 +1,9 @@
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/reset.css';
+
 import "./style.css";
 import App from "./App.vue";
 import { routes } from "./routes";
@@ -13,6 +16,7 @@ const router = createRouter({
 
 const app = createApp(App);
 
-//整个应用支持路由。
 app.use(router);
+app.use(Antd);
+
 app.mount("#app");
