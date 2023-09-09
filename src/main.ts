@@ -1,5 +1,18 @@
-import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import { createApp } from "vue";
+import { createRouter, createWebHistory } from "vue-router";
 
-createApp(App).mount('#app')
+import "./style.css";
+import App from "./App.vue";
+import { routes } from "./routes";
+
+const router = createRouter({
+    // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
+    history: createWebHistory(),
+    routes, // `routes: routes` 的缩写
+});
+
+const app = createApp(App);
+
+//整个应用支持路由。
+app.use(router);
+app.mount("#app");

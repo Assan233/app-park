@@ -1,5 +1,5 @@
 import Home from "@/components/Home.vue";
 
-export const routers =  [
+export const routes =  [
     { path: '/', component: Home },
   ]
