@@ -8,7 +8,11 @@
                 mode="horizontal"
                 :style="{ lineHeight: '64px' }"
             >
-                <MenuItem key="3">nav 1</MenuItem>
+                <template v-for="item in routes">
+                    <MenuItem v-if="item?.meta" :key="item.path">
+                        {{ item.meta?.pageName }}
+                    </MenuItem>
+                </template>
             </Menu>
         </LayoutHeader>
 
@@ -20,22 +24,10 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-import {
-    Layout,
-    LayoutHeader,
-    LayoutSider,
-    LayoutContent,
-    MenuItem,
-    SubMenu,
-    Menu,
-    // BreadcrumbItem,
-    // Breadcrumb,
-} from "ant-design-vue";
-import { UserOutlined, LaptopOutlined } from "@ant-design/icons-vue";
+import { Layout, LayoutHeader, MenuItem, Menu } from "ant-design-vue";
+import { routes } from "@/routes";
 
 const selectedKeys1 = ref<string[]>(["2"]);
-const selectedKeys2 = ref<string[]>(["1"]);
-const openKeys = ref<string[]>(["sub1"]);
 </script>
 
 <style scoped lang="less" src="./index.less"></style>
