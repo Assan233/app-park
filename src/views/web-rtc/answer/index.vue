@@ -1,17 +1,18 @@
 <template>
-    <Row>
-        <Col :span="24">
-            <Button size="large" type="primary" @click="injectMedia(video)"
-                >开始投屏</Button
-            >
+    <Row align="middle">
+        <Col :span="18">
+            <TypographyTitle>观众页</TypographyTitle>
+        </Col>
+        <Col :span="6">
+            <Button size="large" type="primary" @click="injectMedia(video)">连接直播间</Button>
         </Col>
     </Row>
     <video class="rtc__video" ref="video" autoplay></video>
 </template>
 
 <script setup lang="ts">
-import { Row, Col, Button } from "ant-design-vue";
-import { useMedia } from "./media.ts";
+import { Row, Col, Button, TypographyTitle } from "ant-design-vue";
+import { useMedia } from "./media";
 import { ref } from "vue";
 
 const { injectMedia } = useMedia();

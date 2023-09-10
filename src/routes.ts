@@ -1,5 +1,5 @@
-import Home from "@/views/Home/index.vue";
-import WebRTC from "@/components/WebRTC/index.vue";
+import Home from "@/views/home/index.vue";
+import WebRTC from "@/views/web-rtc/index.vue";
 import type { Component } from "vue";
 
 type Route = {
@@ -16,27 +16,26 @@ export const routes: Route[] = [
         path: "/",
         name: "home",
         component: Home,
-        redirect: "/webRTC",
+        // redirect: "/webRTC/offer",
     },
     {
-        path: "/webRTC",
+        path: "/webRTC/:roomType",
         name: "webRTC",
-        component: Home,
-        redirect: "/webRTC/offer",
+        component: WebRTC,
         meta: { pageName: "webRTC(直播)" },
-        children: [
-            {
-                path: "offer",
-                name: "offer",
-                component: WebRTC,
-                meta: { pageName: "主播页" },
-            },
-            // {
-            //     path: "/answer",
-            //     name: "answer",
-            //     component: WebRTC,
-            //     meta: { pageName: "观众页" },
-            // },
-        ],
+        // children: [
+        //     {
+        //         path: "offer",
+        //         name: "offer",
+        //         component: WebRTC,
+        //         meta: { pageName: "主播页" },
+        //     },
+        //     // {
+        //     //     path: "/answer",
+        //     //     name: "answer",
+        //     //     component: WebRTC,
+        //     //     meta: { pageName: "观众页" },
+        //     // },
+        // ],
     },
 ];

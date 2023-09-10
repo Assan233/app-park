@@ -9,6 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    WebRTC: typeof import('./src/components/WebRTC/index.vue')['default']
+    WebRTC: typeof import('./src/views/web-rtc/index.vue')['default']
   }
 }

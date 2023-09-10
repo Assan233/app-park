@@ -10,7 +10,7 @@ export default defineConfig({
     server: {
         // 启动 https ，需要配合插件 vite-plugin-mkcert 启动
         https: true,
-        port: 3000,
+        port: 3001,
     },
 
     resolve: {
