@@ -25,6 +25,8 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { Layout, LayoutHeader, Menu } from "ant-design-vue";
+import type { MenuInfo } from "ant-design-vue/es/menu/src/interface.d.ts";
+
 import { MenuData } from "./const";
 
 const router = useRouter();
@@ -34,8 +36,8 @@ const activeKey = ref<string[]>(null!);
  * 跳转
  * @param {string} info:{key:string}
  */
-function onJump(info: { key: string }) {
-    router.push({ path: info.key });
+function onJump(info: MenuInfo) {
+    router.push({ path: info.key as string });
 }
 </script>
 

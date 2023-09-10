@@ -4,7 +4,7 @@
             <TypographyTitle>主播页</TypographyTitle>
         </Col>
         <Col :span="6">
-            <Button size="large" type="primary" @click="injectMedia(video)"
+            <Button size="large" type="primary" @click="startLive(video)"
                 >开始直播</Button
             >
         </Col>
@@ -14,10 +14,10 @@
 
 <script setup lang="ts">
 import { Row, Col, Button, TypographyTitle } from "ant-design-vue";
-import { useMedia } from "./media";
+import { useOffer } from "./index";
 import { ref } from "vue";
 
-const { injectMedia } = useMedia();
+const { startLive } = useOffer();
 const video = ref<HTMLVideoElement>(null!);
 </script>
 <style scoped lang="less">
@@ -33,3 +33,4 @@ const video = ref<HTMLVideoElement>(null!);
     }
 }
 </style>
+.

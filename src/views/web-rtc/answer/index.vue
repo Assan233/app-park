@@ -4,7 +4,9 @@
             <TypographyTitle>观众页</TypographyTitle>
         </Col>
         <Col :span="6">
-            <Button size="large" type="primary" @click="injectMedia(video)">连接直播间</Button>
+            <Button size="large" type="primary" @click="joinRoom(roomId)"
+                >连接直播间</Button
+            >
         </Col>
     </Row>
     <video class="rtc__video" ref="video" autoplay></video>
@@ -12,11 +14,14 @@
 
 <script setup lang="ts">
 import { Row, Col, Button, TypographyTitle } from "ant-design-vue";
-import { useMedia } from "./media";
+import { useAnswer } from "./index";
 import { ref } from "vue";
+const roomId = 888;
 
-const { injectMedia } = useMedia();
 const video = ref<HTMLVideoElement>(null!);
+const { initSocket, joinRoom } = useAnswer();
+
+initSocket()
 </script>
 <style scoped lang="less">
 .rtc {
@@ -31,3 +36,4 @@ const video = ref<HTMLVideoElement>(null!);
     }
 }
 </style>
+.
