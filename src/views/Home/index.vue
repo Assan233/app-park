@@ -4,15 +4,10 @@
         <LayoutHeader class="header">
             <div class="logo" />
             <Menu
-                v-model:selectedKeys="selectedKeys1"
                 mode="horizontal"
+                :items="MenuData"
                 :style="{ lineHeight: '64px' }"
             >
-                <template v-for="item in routes">
-                    <MenuItem v-if="item?.meta" :key="item.path">
-                        {{ item.meta?.pageName }}
-                    </MenuItem>
-                </template>
             </Menu>
         </LayoutHeader>
 
@@ -23,11 +18,9 @@
     </Layout>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
-import { Layout, LayoutHeader, MenuItem, Menu } from "ant-design-vue";
-import { routes } from "@/routes";
-
-const selectedKeys1 = ref<string[]>(["2"]);
+// import { ref } from "vue";
+import { Layout, LayoutHeader, Menu } from "ant-design-vue";
+import { MenuData } from "./const";
 </script>
 
 <style scoped lang="less" src="./index.less"></style>
