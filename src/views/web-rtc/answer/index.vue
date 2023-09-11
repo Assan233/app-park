@@ -4,7 +4,7 @@
             <TypographyTitle>观众页</TypographyTitle>
         </Col>
         <Col :span="6">
-            <Button size="large" type="primary" @click="joinRoom(roomId)"
+            <Button size="large" type="primary" @click="startWatchLive(roomId)"
                 >连接直播间</Button
             >
         </Col>
@@ -19,9 +19,7 @@ import { ref } from "vue";
 const roomId = 888;
 
 const video = ref<HTMLVideoElement>(null!);
-const { initSocket, joinRoom } = useAnswer();
-
-initSocket()
+const { startWatchLive } = useAnswer();
 </script>
 <style scoped lang="less">
 .rtc {
