@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { Socket } from "socket.io-client";
 
-type Room = { id: number };
+type Room = { id: string };
 type WebRTC = {
     room: Room;
     socket: Socket;
@@ -11,7 +11,7 @@ export const useWebRTC = defineStore("webRTC", {
     state: (): WebRTC => {
         return {
             room: {
-                id: 0,
+                id: '',
             },
             socket: null!,
         };

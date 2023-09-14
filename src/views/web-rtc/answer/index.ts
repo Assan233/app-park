@@ -1,9 +1,11 @@
 import { io } from "socket.io-client";
 import { SOCKET_EVENTS } from "@/const";
 import { useWebRTC } from "@/stores";
+import { createPeerConnection } from "../utils";
 
 export function useAnswer() {
     const webRTCStore = useWebRTC();
+    const localPC = createPeerConnection();
 
     /**
      * 初始化socket连接
@@ -15,7 +17,7 @@ export function useAnswer() {
         // 加入房间
         await joinRoom(roomId);
         // 媒体协商
-        await listenSDP(roomId);
+        await listenSDP();
         // 接收媒体流
         onReceiveMedia();
     }
@@ -55,42 +57,40 @@ export function useAnswer() {
     /**
      * 处理媒体协商
      */
-    async function listenSDP(roomId: string) {
-        const localPC = new RTCPeerConnection();
-        let offerSDP = await localPC.createOffer();
-
-        // 保存为本地SDP
-        await localPC.setLocalDescription(offerSDP);
-        // 通过信令服务器将offerSDP发送到对端
-        postOfferSDP(roomId, offerSDP);
-        const answerSDP = await receiveAnswerSDP();
-        // 设置 远端SDP 到 localPC
-        await localPC.setRemoteDescription(answerSDP);
+    async function listenSDP() {
+        webRTCStore.socket.on(
+            SOCKET_EVENTS.receiveOfferSDP,
+            async (data: {
+                roomId: string;
+                offerSDP: RTCSessionDescriptionInit;
+            }) => {
+                const { roomId, offerSDP } = data;
+                // console.log(roomId, offerSDP);
+                /**
+                 * TODO: createAnswer是有时序的：
+                 * createAnswer之前必须 setRemoteDescription
+                 */
+                // 设置 远端SDP 到 localPC
+                await localPC.setRemoteDescription(offerSDP);
+                // 保存为本地SDP
+                const answerSDP = await localPC.createAnswer();
+                await localPC.setLocalDescription(answerSDP);
+                // 通过信令服务器将localSDP发送到对端
+                postAnswerSDP(roomId, answerSDP);
+            }
+        );
     }
-    function postOfferSDP(roomId: string, offerSDP: RTCSessionDescriptionInit) {
-        webRTCStore.socket.emit(SOCKET_EVENTS.postOfferSDP, {
+    function postAnswerSDP(
+        roomId: string,
+        answerSDP: RTCSessionDescriptionInit
+    ) {
+        webRTCStore.socket.emit(SOCKET_EVENTS.postAnswerSDP, {
             roomId,
-            offerSDP,
+            answerSDP,
         });
     }
-    /**
-     * 接收SDP
-     */
-    function receiveAnswerSDP(): Promise<RTCSessionDescriptionInit> {
-        return new Promise((resolve) => {
-            webRTCStore.socket.on(
-                SOCKET_EVENTS.receiveAnswerSDP,
-                (data: {
-                    roomId: string;
-                    answerSDP: RTCSessionDescriptionInit;
-                }) => {
 
-                    resolve(data.answerSDP);
-                    console.log(`receiveAnswerSDP: ${data.answerSDP}`);
-                }
-            );
-        });
-    }
+
 
     return {
         startWatchLive,
