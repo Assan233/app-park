@@ -11,11 +11,13 @@ export function useOffer() {
         const socket = io("ws://localhost:7001/rtc");
         webRTCStore.setSocket(socket);
 
-        // 初始化socket连接
+        // 建立信令服务
         const roomId = await createRoom();
-        // 注入媒体流到 localPC
-        await injectMedia();
-        // 监听远端媒体协商事件
+        // 网络协商
+        listenCandidate(roomId);
+        // 媒体流注入localPC
+        await injectMedia(video);
+        // 媒体协商
         listenSDP(roomId);
     }
 
@@ -79,19 +81,33 @@ export function useOffer() {
         });
     }
 
+    /** ===== 网络协商 ====== */
+    function listenCandidate(roomId: string) {
+        localPC.onicecandidate = ({ candidate }) => {
+            if (candidate) {
+                webRTCStore.socket.emit(SOCKET_EVENTS.offerCandidate, {
+                    roomId,
+                    candidate,
+                });
+            }
+        };
+    }
+
     /** ===== 处理媒体流 ====== */
     /**
      * 注入媒体流到 localPC
      */
-    async function injectMedia() {
+    async function injectMedia(video: HTMLVideoElement) {
         const mediaStream = await getUserMedia();
+        video.srcObject = mediaStream;
+
         mediaStream
             .getTracks()
             .forEach((track) => localPC.addTrack(track, mediaStream));
     }
     function getUserMedia() {
         const constraints = { video: true, audio: true };
-        return navigator.mediaDevices.getUserMedia(constraints).catch((err) => {
+        return navigator.mediaDevices.getDisplayMedia(constraints).catch((err) => {
             console.error(err);
             throw new Error(err);
         });

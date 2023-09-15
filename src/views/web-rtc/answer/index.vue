@@ -1,10 +1,13 @@
 <template>
     <Row align="middle">
         <Col :span="18">
-            <TypographyTitle>观众页</TypographyTitle>
+            <TypographyTitle>观众</TypographyTitle>
         </Col>
         <Col :span="6">
-            <Button size="large" type="primary" @click="startWatchLive(roomId)"
+            <Button
+                size="large"
+                type="primary"
+                @click="startWatchLive(roomId, video)"
                 >连接直播间</Button
             >
         </Col>
@@ -16,7 +19,7 @@
 import { Row, Col, Button, TypographyTitle } from "ant-design-vue";
 import { useAnswer } from "./index";
 import { ref } from "vue";
-const roomId = 888;
+const roomId = "assan-live-room";
 
 const video = ref<HTMLVideoElement>(null!);
 const { startWatchLive } = useAnswer();

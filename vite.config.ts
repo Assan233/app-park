@@ -9,7 +9,7 @@ import basicSsl from "@vitejs/plugin-basic-ssl";
 export default defineConfig({
     server: {
         // 启动 https ，需要配合插件 vite-plugin-mkcert 启动
-        https: false,
+        https: true,
         port: 3001,
     },
 
@@ -27,6 +27,6 @@ export default defineConfig({
             ],
         }),
         // 生成 启动https本地服务 所需的证书
-        // basicSsl(),
+        basicSsl(),
     ],
 });

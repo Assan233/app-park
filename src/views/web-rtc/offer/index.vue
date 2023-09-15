@@ -1,7 +1,7 @@
 <template>
     <Row align="middle">
         <Col :span="18">
-            <TypographyTitle>主播页</TypographyTitle>
+            <TypographyTitle>主播</TypographyTitle>
         </Col>
         <Col :span="6">
             <Button size="large" type="primary" @click="startLive(video)"

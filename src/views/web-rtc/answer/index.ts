@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { SOCKET_EVENTS } from "@/const";
 import { useWebRTC } from "@/stores";
-import { createPeerConnection } from "../utils";
+import { createPeerConnection, addIceCandidate } from "../utils";
 
 export function useAnswer() {
     const webRTCStore = useWebRTC();
@@ -10,16 +10,18 @@ export function useAnswer() {
     /**
      * 初始化socket连接
      */
-    async function startWatchLive(roomId: string) {
+    async function startWatchLive(roomId: string, video: HTMLVideoElement) {
         const socket = io("ws://localhost:7001/rtc");
         webRTCStore.setSocket(socket);
 
-        // 加入房间
+        // 建立信令服务
         await joinRoom(roomId);
+        // 网络协商
+        listenCandidate();
         // 媒体协商
         await listenSDP();
         // 接收媒体流
-        onReceiveMedia();
+        onReceiveMedia(video);
     }
 
     /** ===== 建立信令服务连接 ====== */
@@ -31,8 +33,6 @@ export function useAnswer() {
         webRTCStore.socket.emit(SOCKET_EVENTS.connectRoom, roomId);
         await onConnectRoom();
     }
-
-    // socket 事件订阅&推送
     /**
      * 已加入房间
      */
@@ -45,11 +45,6 @@ export function useAnswer() {
                     resolve(null);
                 }
             );
-        });
-    }
-    function onReceiveMedia() {
-        webRTCStore.socket.on(SOCKET_EVENTS.receiveMedia, (media: any) => {
-            console.log(`${SOCKET_EVENTS.receiveMedia}: ${media}`);
         });
     }
 
@@ -65,7 +60,6 @@ export function useAnswer() {
                 offerSDP: RTCSessionDescriptionInit;
             }) => {
                 const { roomId, offerSDP } = data;
-                // console.log(roomId, offerSDP);
                 /**
                  * TODO: createAnswer是有时序的：
                  * createAnswer之前必须 setRemoteDescription
@@ -90,7 +84,21 @@ export function useAnswer() {
         });
     }
 
-
+    /** ===== 网络协商 ====== */
+    function listenCandidate() {
+        webRTCStore.socket.on(
+            SOCKET_EVENTS.offerCandidate,
+            (data: { roomId: string; candidate: RTCIceCandidate }) => {
+                addIceCandidate(localPC, data.candidate);
+            }
+        );
+    }
+    function onReceiveMedia(video: HTMLVideoElement) {
+        localPC.ontrack = (event: RTCTrackEvent) => {
+            video.srcObject = event.streams[0];
+            console.log("ontrack media");
+        };
+    }
 
     return {
         startWatchLive,

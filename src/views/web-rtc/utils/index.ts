@@ -8,12 +8,14 @@ export const config = {
 
 export function createPeerConnection(config: any = null): RTCPeerConnection {
     const localPC = new RTCPeerConnection(config);
-    localPC.onicecandidate = (event) => {
-        console.log("icecandidate: ", event);
-    };
-    localPC.ontrack = (event: RTCTrackEvent) => {
-        console.log("ontrack media: ", event);
-    };
-
     return localPC;
+}
+
+export function addIceCandidate(
+    pc: RTCPeerConnection,
+    candidate: RTCIceCandidate
+) {
+    pc.addIceCandidate(candidate).then(() => {
+        console.log("AddIceCandidateSuccess");
+    });
 }
